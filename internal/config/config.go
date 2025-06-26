@@ -12,7 +12,6 @@ import (
 const (
 	EnvMBURL            = "MB_URL"
 	EnvDBDsn            = "DB_DSN"
-	EnvKickWHSecret     = "KICK_WH_SECRET"
 	EnvKickWHCallback   = "KICK_WH_CALLBACK"
 	EnvPort             = "PORT"
 	EnvKickClientID     = "KICK_CLIENT_ID"
@@ -49,7 +48,6 @@ type MBConfig struct {
 }
 
 type Webhooks struct {
-	Secret   string
 	Callback string
 }
 
@@ -70,7 +68,6 @@ func Load() *config {
 
 	flag.StringVar(&Config.MB.URL, "mb-url", os.Getenv(EnvMBURL), "Message Broker URL")
 	flag.IntVar(&Config.Global.LogLevel, "log-level", Config.Global.LogLevel, "Minimal Log Level (default: -4)")
-	flag.StringVar(&Config.Webhooks.Secret, "wh-secret", os.Getenv(EnvKickWHSecret), "secret for subscribing to webhooks")
 	flag.StringVar(&Config.Webhooks.Callback, "wh-callback", os.Getenv(EnvKickWHCallback), "kick secret")
 	flag.IntVar(&Config.Global.Port, "port", Config.Global.Port, "http port")
 	flag.StringVar(&Config.Kick.ClientID, "client-id", os.Getenv(EnvKickClientID), "kick client id")
