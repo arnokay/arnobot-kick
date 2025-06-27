@@ -69,20 +69,26 @@ func (s *BotService) StartBot(ctx context.Context, arg sharedData.PlatformToggle
 		return err
 	}
 
-  botID := strconv.Itoa(int(selectedBot.BotID))
+	broadcasterID := strconv.Itoa(int(selectedBot.BroadcasterID))
+	broadcasterProvider, err := s.authModule.AuthProviderGet(ctx, sharedData.AuthProviderGet{
+		ProviderUserID: &broadcasterID,
+		Provider:       platform.Kick.String(),
+	})
+	if err != nil {
+		s.logger.ErrorContext(ctx, "cannot get broadcaster provider")
+		return err
+	}
+
+	err = s.whService.Subscribe(ctx, *broadcasterProvider)
+	if err != nil {
+		return err
+	}
+
+	botID := strconv.Itoa(int(selectedBot.BotID))
 	botProvider, err := s.authModule.AuthProviderGet(ctx, sharedData.AuthProviderGet{
 		ProviderUserID: &botID,
 		Provider:       platform.Kick.String(),
 	})
-	if err != nil {
-		s.logger.ErrorContext(ctx, "cannot get bot provider")
-		return err
-	}
-
-	err = s.whService.Subscribe(ctx, *botProvider, selectedBot.BroadcasterID)
-	if err != nil {
-		return err
-	}
 
 	s.kickService.AppSendChannelMessage(ctx, *botProvider, selectedBot.BroadcasterID, "hi!", "")
 
@@ -95,7 +101,7 @@ func (s *BotService) StopBot(ctx context.Context, arg sharedData.PlatformToggleB
 		return err
 	}
 
-  botID := strconv.Itoa(int(selectedBot.BotID))
+	botID := strconv.Itoa(int(selectedBot.BotID))
 	botProvider, err := s.authModule.AuthProviderGet(ctx, sharedData.AuthProviderGet{
 		ProviderUserID: &botID,
 		Provider:       platform.Kick.String(),
@@ -143,10 +149,10 @@ func (s *BotService) SelectedBotSetDefault(ctx context.Context, userID uuid.UUID
 		if err != nil {
 			return nil, err
 		}
-    providerUserID, err := strconv.Atoi(userProvider.ProviderUserID)
-    if err != nil {
-      s.logger.ErrorContext(ctx, "cant parse providerUserID to string", "err", err, "providerUserID", providerUserID)
-    }
+		providerUserID, err := strconv.Atoi(userProvider.ProviderUserID)
+		if err != nil {
+			s.logger.ErrorContext(ctx, "cant parse providerUserID to string", "err", err, "providerUserID", providerUserID)
+		}
 		bot, err = s.BotCreate(ctx, data.PlatformBotCreate{
 			UserID:        userID,
 			BotID:         defaultBot.BotID,

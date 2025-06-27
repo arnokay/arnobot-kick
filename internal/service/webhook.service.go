@@ -93,13 +93,14 @@ func (s *WebhookService) UnsubscribeAll(
 	return nil
 }
 
-func (s *WebhookService) Subscribe(ctx context.Context, botProvider data.AuthProvider, broadcasterID int32) error {
-	client := s.kickManager.GetByProvider(ctx, botProvider)
+func (s *WebhookService) Subscribe(
+	ctx context.Context,
+	broadcasterProvider data.AuthProvider,
+) error {
+	client := s.kickManager.GetByProvider(ctx, broadcasterProvider)
 
-	// err return 220 OK ???
 	_, err := client.CreateSubscriptions(ctx, gokick.SubscriptionRequest{
-		BroadcasterUserID: int(broadcasterID),
-		Method:            gokick.SubscriptionMethodWebhook,
+		Method: gokick.SubscriptionMethodWebhook,
 		Events: []gokick.SubscriptionRequestEvent{
 			{Name: gokick.SubscriptionNameChatMessage, Version: 1},
 			{Name: gokick.SubscriptionNameChannelFollow, Version: 1},
@@ -112,7 +113,7 @@ func (s *WebhookService) Subscribe(ctx context.Context, botProvider data.AuthPro
 		},
 	})
 	if err != nil {
-		s.logger.ErrorContext(ctx, "cannot subscribe to channel", "err", err, "broadcasterID", broadcasterID, "botID", botProvider.ProviderUserID)
+		s.logger.ErrorContext(ctx, "cannot subscribe to channel", "err", err, "broadcasterID", broadcasterProvider.ProviderUserID)
 		return apperror.ErrExternal
 	}
 
