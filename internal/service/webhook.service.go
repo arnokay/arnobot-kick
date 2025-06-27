@@ -96,21 +96,25 @@ func (s *WebhookService) UnsubscribeAll(
 func (s *WebhookService) Subscribe(ctx context.Context, botProvider data.AuthProvider, broadcasterID int32) error {
 	client := s.kickManager.GetByProvider(ctx, botProvider)
 
-  // err return 220 OK ???
-	_, _ = client.CreateSubscriptions(ctx, gokick.SubscriptionMethodWebhook, []gokick.SubscriptionRequest{
-		{Name: gokick.SubscriptionNameChatMessage, Version: 1},
-		{Name: gokick.SubscriptionNameChannelFollow, Version: 1},
-		{Name: gokick.SubscriptionNameChannelSubscriptionRenewal, Version: 1},
-		{Name: gokick.SubscriptionNameChannelSubscriptionGifts, Version: 1},
-		{Name: gokick.SubscriptionNameChannelSubscriptionCreated, Version: 1},
-		{Name: gokick.SubscriptionNameLivestreamStatusUpdated, Version: 1},
-		{Name: gokick.SubscriptionNameLivestreamMetadataUpdated, Version: 1},
-		{Name: gokick.SubscriptionNameModerationBanned, Version: 1},
+	// err return 220 OK ???
+	_, err := client.CreateSubscriptions(ctx, gokick.SubscriptionRequest{
+		BroadcasterUserID: int(broadcasterID),
+		Method:            gokick.SubscriptionMethodWebhook,
+		Events: []gokick.SubscriptionRequestEvent{
+			{Name: gokick.SubscriptionNameChatMessage, Version: 1},
+			{Name: gokick.SubscriptionNameChannelFollow, Version: 1},
+			{Name: gokick.SubscriptionNameChannelSubscriptionRenewal, Version: 1},
+			{Name: gokick.SubscriptionNameChannelSubscriptionGifts, Version: 1},
+			{Name: gokick.SubscriptionNameChannelSubscriptionCreated, Version: 1},
+			{Name: gokick.SubscriptionNameLivestreamStatusUpdated, Version: 1},
+			{Name: gokick.SubscriptionNameLivestreamMetadataUpdated, Version: 1},
+			{Name: gokick.SubscriptionNameModerationBanned, Version: 1},
+		},
 	})
-	// if err != nil {
-	// 	s.logger.ErrorContext(ctx, "cannot subscribe to channel", "err", err, "broadcasterID", broadcasterID, "botID", botProvider.ProviderUserID)
-	// 	return apperror.ErrExternal
-	// }
+	if err != nil {
+		s.logger.ErrorContext(ctx, "cannot subscribe to channel", "err", err, "broadcasterID", broadcasterID, "botID", botProvider.ProviderUserID)
+		return apperror.ErrExternal
+	}
 
 	return nil
 }

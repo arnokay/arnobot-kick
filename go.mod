@@ -12,7 +12,6 @@ require (
 )
 
 require (
-	github.com/golang-jwt/jwt/v4 v4.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
@@ -22,7 +21,6 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/nats-io/nkeys v0.4.11 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
-	github.com/nicklaw5/helix/v2 v2.31.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/crypto v0.37.0 // indirect
@@ -32,4 +30,4 @@ require (
 	golang.org/x/text v0.24.0 // indirect
 )
 
-replace github.com/scorfly/gokick => github.com/arnokay/gokick v0.0.0-20250626190854-0e5e0db3dd01
+replace github.com/scorfly/gokick => github.com/arnokay/gokick v0.0.0-20250627013506-a4cb3b005dbf
