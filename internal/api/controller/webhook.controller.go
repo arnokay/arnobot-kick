@@ -53,7 +53,7 @@ func (c *WebhookController) Callback(ctx echo.Context) error {
 		ctx.Bind(&event)
 
 
-		bot, err := c.botService.SelectedBotGetByBroadcasterID(ctx.Request().Context(), int32(event.Broadcaster.UserID))
+		bot, err := c.botService.SelectedBotGetByBroadcasterID(ctx.Request().Context(), int(event.Broadcaster.UserID))
 		if err != nil {
 			c.logger.ErrorContext(ctx.Request().Context(), "cannot get selected bot")
 			return nil

@@ -73,7 +73,7 @@ func (c *ChatController) ChatMessageSend(msg *nats.Msg) {
 	if err != nil {
 		c.logger.ErrorContext(ctx, "cant parse to string", "err", err, "broadcasterID", payload.Data.BroadcasterID)
 	}
-	err = c.kickService.AppSendChannelMessage(ctx, *botProvider, int32(broadcasterID), payload.Data.Message, payload.Data.ReplyTo)
+	err = c.kickService.AppSendChannelMessage(ctx, *botProvider, int(broadcasterID), payload.Data.Message, payload.Data.ReplyTo)
 	if err != nil {
 		c.logger.ErrorContext(
 			ctx,

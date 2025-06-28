@@ -8,68 +8,78 @@ import (
 )
 
 type PlatformDefaultBot struct {
-	BotID int32
+	BotID int
 }
 
 func NewPlatformDefaultBotFromDB(fromDB db.KickDefaultBot) PlatformDefaultBot {
 	return PlatformDefaultBot{
-		BotID: fromDB.BotID,
+		BotID: int(fromDB.BotID),
 	}
 }
 
 type PlatformSelectedBot struct {
 	UserID        uuid.UUID
-	BotID         int32
-	BroadcasterID int32
+	BotID         int
+	BroadcasterID int
+	Enabled       bool
 	UpdatedAt     time.Time
 }
 
 func NewPlatformSelectedBotFromDB(fromDB db.KickSelectedBot) PlatformSelectedBot {
 	return PlatformSelectedBot{
 		UserID:        fromDB.UserID,
-		BotID:         fromDB.BotID,
-		BroadcasterID: fromDB.BroadcasterID,
+		BotID:         int(fromDB.BotID),
+		BroadcasterID: int(fromDB.BroadcasterID),
+		Enabled:       fromDB.Enabled,
 	}
 }
 
 type PlatformBot struct {
 	UserID        uuid.UUID
-	BotID         int32
-	BroadcasterID int32
+	BotID         int
+	BroadcasterID int
 }
 
 func NewPlatformBotFromDB(fromDB db.KickBot) PlatformBot {
 	return PlatformBot{
 		UserID:        fromDB.UserID,
-		BroadcasterID: fromDB.BroadcasterID,
-		BotID:         fromDB.BotID,
+		BroadcasterID: int(fromDB.BroadcasterID),
+		BotID:         int(fromDB.BotID),
 	}
 }
 
 type PlatformBotCreate struct {
 	UserID        uuid.UUID
-	BotID         int32
-	BroadcasterID int32
+	BotID         int
+	BroadcasterID int
 }
 
 func (d PlatformBotCreate) ToDB() db.KickBotCreateParams {
 	return db.KickBotCreateParams{
 		UserID:        d.UserID,
-		BroadcasterID: d.BroadcasterID,
-		BotID:         d.BotID,
+		BroadcasterID: int32(d.BroadcasterID),
+		BotID:         int32(d.BotID),
 	}
 }
 
 type PlatformBotsGet struct {
 	UserID        *uuid.UUID
-	BotID         *int32
-	BroadcasterID *int32
+	BotID         *int
+	BroadcasterID *int
 }
 
 func (d PlatformBotsGet) ToDB() db.KickBotsGetParams {
+	var botID int32
+	if d.BotID != nil {
+		botID = int32(*d.BotID)
+	}
+	var broadcasterID int32
+	if d.BroadcasterID != nil {
+		broadcasterID = int32(*d.BroadcasterID)
+	}
 	return db.KickBotsGetParams{
 		UserID:        d.UserID,
-		BotID:         d.BotID,
-		BroadcasterID: d.BroadcasterID,
+		BotID:         &botID,
+		BroadcasterID: &broadcasterID,
 	}
 }

@@ -66,7 +66,7 @@ func (s *WebhookService) Unsubscribe(
 func (s *WebhookService) UnsubscribeAll(
 	ctx context.Context,
 	botProvider data.AuthProvider,
-	broadcasterID int32,
+	broadcasterID int,
 ) error {
 	client := s.kickManager.GetByProvider(ctx, botProvider)
 

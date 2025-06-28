@@ -29,7 +29,7 @@ func NewKickService(
 func (s *KickService) AppSendChannelMessage(
 	ctx context.Context,
 	botProvider data.AuthProvider,
-	broadcasterID int32,
+	broadcasterID int,
 	message string,
 	replyTo string,
 ) error {

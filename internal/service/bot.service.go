@@ -45,7 +45,7 @@ func NewBotService(
 	}
 }
 
-func (s *BotService) StartBot(ctx context.Context, arg sharedData.PlatformToggleBot) error {
+func (s *BotService) StartBot(ctx context.Context, arg sharedData.PlatformBotToggle) error {
 	txCtx, err := s.txService.Begin(ctx)
 	defer s.txService.Rollback(txCtx)
 	if err != nil {
@@ -84,18 +84,26 @@ func (s *BotService) StartBot(ctx context.Context, arg sharedData.PlatformToggle
 		return err
 	}
 
+	err = s.SelectedBotChangeStatus(ctx, arg.UserID, true)
+	if err != nil {
+		return err
+	}
+
 	botID := strconv.Itoa(int(selectedBot.BotID))
 	botProvider, err := s.authModule.AuthProviderGet(ctx, sharedData.AuthProviderGet{
 		ProviderUserID: &botID,
 		Provider:       platform.Kick.String(),
 	})
+  if err != nil {
+    return err
+  }
 
 	s.kickService.AppSendChannelMessage(ctx, *botProvider, selectedBot.BroadcasterID, "hi!", "")
 
 	return nil
 }
 
-func (s *BotService) StopBot(ctx context.Context, arg sharedData.PlatformToggleBot) error {
+func (s *BotService) StopBot(ctx context.Context, arg sharedData.PlatformBotToggle) error {
 	selectedBot, err := s.SelectedBotGet(ctx, arg.UserID)
 	if err != nil {
 		return err
@@ -113,6 +121,11 @@ func (s *BotService) StopBot(ctx context.Context, arg sharedData.PlatformToggleB
 	err = s.whService.UnsubscribeAll(ctx, *botProvider, selectedBot.BroadcasterID)
 	if err != nil {
 		s.logger.DebugContext(ctx, "bot cannot unsubscribe")
+		return err
+	}
+
+	err = s.SelectedBotChangeStatus(ctx, arg.UserID, false)
+	if err != nil {
 		return err
 	}
 
@@ -156,7 +169,7 @@ func (s *BotService) SelectedBotSetDefault(ctx context.Context, userID uuid.UUID
 		bot, err = s.BotCreate(ctx, data.PlatformBotCreate{
 			UserID:        userID,
 			BotID:         defaultBot.BotID,
-			BroadcasterID: int32(providerUserID),
+			BroadcasterID: int(providerUserID),
 		})
 		if err != nil {
 			return nil, err
@@ -176,8 +189,8 @@ func (s *BotService) SelectedBotSetDefault(ctx context.Context, userID uuid.UUID
 	return selectedBot, nil
 }
 
-func (s *BotService) SelectedBotGetByBroadcasterID(ctx context.Context, broadcasterID int32) (*data.PlatformSelectedBot, error) {
-	fromDB, err := s.storage.Query(ctx).KickSelectedBotGetByBroadcasterID(ctx, broadcasterID)
+func (s *BotService) SelectedBotGetByBroadcasterID(ctx context.Context, broadcasterID int) (*data.PlatformSelectedBot, error) {
+	fromDB, err := s.storage.Query(ctx).KickSelectedBotGetByBroadcasterID(ctx, int32(broadcasterID))
 	if err != nil {
 		s.logger.DebugContext(ctx, "cannot get selected bot", "err", err, "broadcasterID", broadcasterID)
 		return nil, s.storage.HandleErr(ctx, err)
@@ -226,8 +239,8 @@ func (s *BotService) DefaultBotGet(ctx context.Context) (*data.PlatformDefaultBo
 	return &bot, nil
 }
 
-func (s *BotService) DefaultBotChange(ctx context.Context, botID int32) error {
-	count, err := s.storage.Query(ctx).KickDefaultBotUpdate(ctx, botID)
+func (s *BotService) DefaultBotChange(ctx context.Context, botID int) error {
+	count, err := s.storage.Query(ctx).KickDefaultBotUpdate(ctx, int32(botID))
 	if err != nil {
 		s.logger.DebugContext(ctx, "cannot update default bot", "err", err)
 		return s.storage.HandleErr(ctx, err)
@@ -252,11 +265,24 @@ func (s *BotService) SelectedBotGet(ctx context.Context, userID uuid.UUID) (*dat
 	return &bot, nil
 }
 
+func (s *BotService) SelectedBotChangeStatus(ctx context.Context, userID uuid.UUID, enable bool) error {
+	_, err := s.storage.Query(ctx).KickSelectedBotStatusChange(ctx, db.KickSelectedBotStatusChangeParams{
+		UserID:  userID,
+		Enabled: enable,
+	})
+	if err != nil {
+		s.logger.DebugContext(ctx, "cannot enable/disable bot", "err", err)
+		return s.storage.HandleErr(ctx, err)
+	}
+
+	return nil
+}
+
 func (s *BotService) SelectedBotChange(ctx context.Context, bot data.PlatformBot) (*data.PlatformSelectedBot, error) {
 	fromDB, err := s.storage.Query(ctx).KickSelectedBotChange(ctx, db.KickSelectedBotChangeParams{
 		UserID:        bot.UserID,
-		BotID:         bot.BotID,
-		BroadcasterID: bot.BroadcasterID,
+		BotID:         int32(bot.BotID),
+		BroadcasterID: int32(bot.BroadcasterID),
 	})
 	if err != nil {
 		s.logger.DebugContext(ctx, "cannot change selected bot", "err", err)

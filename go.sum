@@ -1,5 +1,7 @@
 github.com/arnokay/arnobot-shared v0.1.1-0.20250626184802-101da2b03751 h1:0jhEOu017gvk8rxFS+lqDkXtCqMb6Y/jYhvYxCRa/GY=
 github.com/arnokay/arnobot-shared v0.1.1-0.20250626184802-101da2b03751/go.mod h1:tW1V9l7XloSgi9f/oatZuYJeNzhQ9MkEiidbmDPBr9I=
+github.com/arnokay/arnobot-shared v0.1.1-0.20250628202534-73aff044efde h1:9f+sI+YLSkSpF6nEeC+ped2ZmMHOH7CRzz/qBiwVIWk=
+github.com/arnokay/arnobot-shared v0.1.1-0.20250628202534-73aff044efde/go.mod h1:tW1V9l7XloSgi9f/oatZuYJeNzhQ9MkEiidbmDPBr9I=
 github.com/arnokay/gokick v0.0.0-20250627013506-a4cb3b005dbf h1:p0Lrc5vnOFF7ea7WNVyx1R8PAMJeglq+sGdB0ewyLTY=
 github.com/arnokay/gokick v0.0.0-20250627013506-a4cb3b005dbf/go.mod h1:fhOFkrbSpWKVIr0oQ8f2zqA+UEJcZ7U43M/PIx4vmVw=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
