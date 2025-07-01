@@ -12,6 +12,7 @@ import (
 	"github.com/scorfly/gokick"
 
 	"github.com/arnokay/arnobot-kick/internal/api/middleware"
+	"github.com/arnokay/arnobot-kick/internal/data"
 	"github.com/arnokay/arnobot-kick/internal/service"
 )
 
@@ -74,6 +75,7 @@ func (c *WebhookController) Callback(ctx echo.Context) error {
 			BroadcasterName:  event.Broadcaster.Username,
 			ChatterID:        chatterID,
 			ChatterName:      event.Sender.Username,
+			ChatterRole:      data.GetChatterRole(event.Sender.Identity.Badges),
 			ChatterLogin:     event.Sender.Username,
 		}
 
