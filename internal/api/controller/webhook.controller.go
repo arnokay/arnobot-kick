@@ -46,12 +46,10 @@ func (c *WebhookController) Routes(parentGroup *echo.Group) {
 }
 
 func (c *WebhookController) Callback(ctx echo.Context) error {
-  println("kek")
 	switch ctx.Request().Header.Get("Kick-Event-Type") {
 	case gokick.SubscriptionNameChatMessage.String():
 		var event gokick.ChatMessageEvent
 		ctx.Bind(&event)
-
 
 		bot, err := c.botService.SelectedBotGetByBroadcasterID(ctx.Request().Context(), int(event.Broadcaster.UserID))
 		if err != nil {
@@ -66,6 +64,7 @@ func (c *WebhookController) Callback(ctx echo.Context) error {
 			EventCommon: events.EventCommon{
 				Platform:      platform.Kick,
 				BroadcasterID: broadcasterID,
+				UserID:        bot.UserID,
 				BotID:         strconv.Itoa(int(bot.BotID)),
 			},
 			MessageID:        event.MessageID,

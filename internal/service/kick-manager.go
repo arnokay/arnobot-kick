@@ -1,15 +1,18 @@
 package service
 
 import (
+	"bytes"
 	"context"
 	"log/slog"
 	"sync"
+	"time"
 
 	"github.com/arnokay/arnobot-shared/apperror"
 	"github.com/arnokay/arnobot-shared/applog"
 	"github.com/arnokay/arnobot-shared/data"
 	"github.com/arnokay/arnobot-shared/pkg/assert"
 	sharedService "github.com/arnokay/arnobot-shared/service"
+	"github.com/nats-io/nats.go/jetstream"
 	"github.com/scorfly/gokick"
 )
 
@@ -24,10 +27,15 @@ type KickManager struct {
 	clients map[string]*gokick.Client
 	mu      sync.RWMutex
 
+	cache      jetstream.KeyValue
 	authModule *sharedService.AuthModule
 }
 
-func NewKickManager(authModule *sharedService.AuthModule, clientID, clientSecret string) *KickManager {
+func NewKickManager(
+	cache jetstream.KeyValue,
+	authModule *sharedService.AuthModule,
+	clientID, clientSecret string,
+) *KickManager {
 	logger := applog.NewServiceLogger("kick-manager")
 
 	appClient, err := gokick.NewClient(&gokick.ClientOptions{
@@ -47,6 +55,7 @@ func NewKickManager(authModule *sharedService.AuthModule, clientID, clientSecret
 		clientSecret: clientSecret,
 		appClient:    appClient,
 		clients:      make(map[string]*gokick.Client),
+		cache:        cache,
 		authModule:   authModule,
 	}
 }
@@ -68,7 +77,7 @@ func (hm *KickManager) GetByID(ctx context.Context, kickID string) (*gokick.Clie
 }
 
 func (hm *KickManager) GetByProvider(ctx context.Context, provider data.AuthProvider) *gokick.Client {
-  client, err := hm.GetByID(ctx, provider.ProviderUserID)
+	client, err := hm.GetByID(ctx, provider.ProviderUserID)
 
 	if err == nil {
 		return client
@@ -89,10 +98,19 @@ func (hm *KickManager) GetByProvider(ctx context.Context, provider data.AuthProv
 	})
 
 	client.OnUserAccessTokenRefreshed(func(newAccessToken, newRefreshToken string) {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+    // COMBAK: maybe set ttl?
+		hm.cache.Put(
+			ctx,
+			"hm.art."+provider.Provider+"."+provider.ProviderUserID,
+			bytes.Join([][]byte{[]byte(newAccessToken), []byte(newRefreshToken)}, []byte("...")),
+		)
 		hm.logger.InfoContext(ctx, "token refreshed", "providerUserID", provider.ProviderUserID)
-		err := hm.authModule.AuthProviderUpdateTokens(ctx, provider.ID, data.AuthProviderUpdateTokens{
+		err := hm.authModule.AuthProviderUpdateTokens(ctx, data.AuthProviderUpdateTokens{
+			ID:           provider.ID,
 			AccessToken:  newAccessToken,
-			RefreshToken: &newRefreshToken,
+			RefreshToken: newRefreshToken,
 		})
 		if err != nil {
 			hm.logger.ErrorContext(ctx, "failed to update tokens", "providerID", provider.ID, "providerUserID", provider.ProviderUserID)

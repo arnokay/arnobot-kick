@@ -8,6 +8,7 @@ import (
 	"github.com/arnokay/arnobot-shared/applog"
 	"github.com/arnokay/arnobot-shared/apptype"
 	"github.com/arnokay/arnobot-shared/data"
+	"github.com/arnokay/arnobot-shared/events"
 	"github.com/arnokay/arnobot-shared/pkg/assert"
 	"github.com/arnokay/arnobot-shared/platform"
 	sharedService "github.com/arnokay/arnobot-shared/service"
@@ -53,7 +54,7 @@ func (c *ChatController) Connect(conn *nats.Conn) {
 }
 
 func (c *ChatController) ChatMessageSend(msg *nats.Msg) {
-	var payload apptype.PlatformChatMessageSend
+	var payload apptype.Request[events.MessageSend]
 
 	payload.Decode(msg.Data)
 
@@ -73,7 +74,7 @@ func (c *ChatController) ChatMessageSend(msg *nats.Msg) {
 	if err != nil {
 		c.logger.ErrorContext(ctx, "cant parse to string", "err", err, "broadcasterID", payload.Data.BroadcasterID)
 	}
-	err = c.kickService.AppSendChannelMessage(ctx, *botProvider, int(broadcasterID), payload.Data.Message, payload.Data.ReplyTo)
+	err = c.kickService.AppSendChannelMessage(ctx, *botProvider, broadcasterID, payload.Data.Message, payload.Data.ReplyTo)
 	if err != nil {
 		c.logger.ErrorContext(
 			ctx,
