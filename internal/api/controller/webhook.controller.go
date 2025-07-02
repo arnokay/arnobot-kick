@@ -62,7 +62,6 @@ func (c *WebhookController) Callback(ctx echo.Context) error {
 		chatterID := strconv.Itoa(event.Sender.UserID)
 
 
-    c.logger.DebugContext(ctx.Request().Context(), "badges", "badges", event.Sender.Identity.Badges)
 		internalEvent := events.Message{
 			EventCommon: events.EventCommon{
 				Platform:      platform.Kick,
