@@ -12,6 +12,7 @@ import (
 	"github.com/arnokay/arnobot-shared/data"
 	"github.com/arnokay/arnobot-shared/pkg/assert"
 	sharedService "github.com/arnokay/arnobot-shared/service"
+	"github.com/arnokay/arnobot-shared/trace"
 	"github.com/nats-io/nats.go/jetstream"
 	"github.com/scorfly/gokick"
 )
@@ -99,6 +100,7 @@ func (hm *KickManager) GetByProvider(ctx context.Context, provider data.AuthProv
 
 	client.OnUserAccessTokenRefreshed(func(newAccessToken, newRefreshToken string) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+    ctx = trace.Context(ctx, trace.New())
 		defer cancel()
     // COMBAK: maybe set ttl?
 		hm.cache.Put(
