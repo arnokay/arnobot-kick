@@ -8,7 +8,7 @@ require (
 	github.com/jackc/pgx/v5 v5.7.4
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/nats-io/nats.go v1.41.2
-	github.com/scorfly/gokick v1.8.0
+	github.com/scorfly/gokick v1.10.0
 )
 
 require (
@@ -29,5 +29,3 @@ require (
 	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
 )
-
-replace github.com/scorfly/gokick => github.com/arnokay/gokick v0.0.0-20250627013506-a4cb3b005dbf

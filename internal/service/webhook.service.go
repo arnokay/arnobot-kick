@@ -99,9 +99,10 @@ func (s *WebhookService) Subscribe(
 ) error {
 	client := s.kickManager.GetByProvider(ctx, broadcasterProvider)
 
-	_, err := client.CreateSubscriptions(ctx, gokick.SubscriptionRequest{
-		Method: gokick.SubscriptionMethodWebhook,
-		Events: []gokick.SubscriptionRequestEvent{
+	_, err := client.CreateSubscriptions(
+		ctx,
+		gokick.SubscriptionMethodWebhook,
+		[]gokick.SubscriptionRequest{
 			{Name: gokick.SubscriptionNameChatMessage, Version: 1},
 			{Name: gokick.SubscriptionNameChannelFollow, Version: 1},
 			{Name: gokick.SubscriptionNameChannelSubscriptionRenewal, Version: 1},
@@ -111,7 +112,8 @@ func (s *WebhookService) Subscribe(
 			{Name: gokick.SubscriptionNameLivestreamMetadataUpdated, Version: 1},
 			{Name: gokick.SubscriptionNameModerationBanned, Version: 1},
 		},
-	})
+		nil,
+	)
 	if err != nil {
 		s.logger.ErrorContext(ctx, "cannot subscribe to channel", "err", err, "broadcasterID", broadcasterProvider.ProviderUserID)
 		return apperror.ErrExternal
