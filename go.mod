@@ -8,7 +8,6 @@ require (
 	github.com/jackc/pgx/v5 v5.7.4
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/nats-io/nats.go v1.41.2
-	github.com/scorfly/gokick v1.10.0
 )
 
 require (
@@ -21,6 +20,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/nats-io/nkeys v0.4.11 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
+	github.com/scorfly/gokick v1.10.0
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/crypto v0.37.0 // indirect

@@ -3,9 +3,7 @@ package service
 import (
 	"bytes"
 	"context"
-	"io"
 	"log/slog"
-	"net/http"
 	"sync"
 	"time"
 
@@ -79,40 +77,6 @@ func (hm *KickManager) GetByID(ctx context.Context, kickID string) (*gokick.Clie
 	return nil, apperror.New(apperror.CodeNotFound, "gokick client is not found", nil)
 }
 
-// TODO: remove later, i need this to find a bug
-type customRoundTripper struct {
-	logger *slog.Logger
-}
-
-func (l *customRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
-	l.logRequest(req)
-
-	return http.DefaultTransport.RoundTrip(req)
-}
-
-func (l *customRoundTripper) logRequest(req *http.Request) {
-	l.logger.Debug("[REQUEST]", "method", req.Method, "url", req.URL.String())
-
-	for name, values := range req.Header {
-		for _, value := range values {
-			if name == "Authorization" || name == "Cookie" {
-				l.logger.Debug("[REQUEST HEADER]", "name", name, "value", "[REDACTED]")
-			} else {
-				l.logger.Debug("[REQUEST HEADER]", "name", name, "value", value)
-			}
-		}
-	}
-
-	if req.Body != nil {
-		body, err := io.ReadAll(req.Body)
-		if err == nil {
-			// Restore the body for the actual request
-			req.Body = io.NopCloser(bytes.NewReader(body))
-			l.logger.Debug("[REQUEST BODY]", "body", string(body))
-		}
-	}
-}
-
 func (hm *KickManager) GetByProvider(ctx context.Context, provider data.AuthProvider) *gokick.Client {
 	client, err := hm.GetByID(ctx, provider.ProviderUserID)
 
@@ -128,9 +92,6 @@ func (hm *KickManager) GetByProvider(ctx context.Context, provider data.AuthProv
 	}
 
 	client, _ = gokick.NewClient(&gokick.ClientOptions{
-		HTTPClient: &http.Client{
-			Transport: &customRoundTripper{logger: hm.logger},
-		},
 		ClientID:         hm.clientID,
 		ClientSecret:     hm.clientSecret,
 		UserAccessToken:  provider.AccessToken,
