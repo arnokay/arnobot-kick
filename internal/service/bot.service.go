@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"log/slog"
 	"strconv"
 
 	"github.com/arnokay/arnobot-shared/apperror"
@@ -24,7 +23,7 @@ type BotService struct {
 	whService   *WebhookService
 	kickService *KickService
 
-	logger *slog.Logger
+	logger applog.Logger
 }
 
 func NewBotService(

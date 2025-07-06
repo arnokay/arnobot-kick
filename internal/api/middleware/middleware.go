@@ -3,7 +3,7 @@ package middleware
 import (
 	"bytes"
 	"io"
-	"log/slog"
+	
 
 	"github.com/arnokay/arnobot-shared/apperror"
 	"github.com/arnokay/arnobot-shared/applog"
@@ -13,7 +13,7 @@ import (
 )
 
 type Middlewares struct {
-	logger *slog.Logger
+	logger applog.Logger
 
 	AuthMiddlewares *middlewares.AuthMiddlewares
 }

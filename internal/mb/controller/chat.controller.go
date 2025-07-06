@@ -2,7 +2,7 @@ package controller
 
 import (
 	"fmt"
-	"log/slog"
+	
 	"strconv"
 
 	"github.com/arnokay/arnobot-shared/applog"
@@ -22,7 +22,7 @@ type ChatController struct {
 	kickService *service.KickService
 	authModule  *sharedService.AuthModule
 
-	logger *slog.Logger
+	logger applog.Logger
 }
 
 func NewChatController(

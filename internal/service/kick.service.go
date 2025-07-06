@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"log/slog"
 
 	"github.com/arnokay/arnobot-shared/apperror"
 	"github.com/arnokay/arnobot-shared/applog"
@@ -12,7 +11,7 @@ import (
 
 type KickService struct {
 	kickManager *KickManager
-	logger      *slog.Logger
+	logger      applog.Logger
 }
 
 func NewKickService(

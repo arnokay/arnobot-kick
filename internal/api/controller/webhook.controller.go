@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"log/slog"
+	
 	"strconv"
 
 	"github.com/arnokay/arnobot-shared/applog"
@@ -17,7 +17,7 @@ import (
 )
 
 type WebhookController struct {
-	logger *slog.Logger
+	logger applog.Logger
 
 	middlewares *middleware.Middlewares
 

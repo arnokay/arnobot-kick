@@ -3,7 +3,6 @@ package service
 import (
 	"bytes"
 	"context"
-	"log/slog"
 	"sync"
 	"time"
 
@@ -19,7 +18,7 @@ import (
 
 // TODO: right now there is no cleanup for clients
 type KickManager struct {
-	logger       *slog.Logger
+	logger       applog.Logger
 	clientID     string
 	clientSecret string
 
