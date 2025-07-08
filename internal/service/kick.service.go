@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/arnokay/arnobot-shared/apperror"
 	"github.com/arnokay/arnobot-shared/applog"
@@ -28,13 +29,18 @@ func NewKickService(
 func (s *KickService) AppSendChannelMessage(
 	ctx context.Context,
 	botProvider data.AuthProvider,
-	broadcasterID int,
+	broadcasterID string,
 	message string,
 	replyTo string,
 ) error {
 	client := s.kickManager.GetByProvider(ctx, botProvider)
+	bID, err := strconv.Atoi(broadcasterID)
+	if err != nil {
+		s.logger.ErrorContext(ctx, "cannot convert broadcasterID to int", "broadcaster_id", broadcasterID)
+		return apperror.ErrInvalidInput
+	}
 
-	_, err := client.SendChatMessage(ctx, int(broadcasterID), message, &replyTo, gokick.MessageTypeUser)
+	_, err = client.SendChatMessage(ctx, bID, message, &replyTo, gokick.MessageTypeUser)
 	if err != nil {
 		s.logger.ErrorContext(
 			ctx,

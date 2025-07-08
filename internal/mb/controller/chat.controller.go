@@ -2,8 +2,6 @@ package controller
 
 import (
 	"fmt"
-	
-	"strconv"
 
 	"github.com/arnokay/arnobot-shared/applog"
 	"github.com/arnokay/arnobot-shared/apptype"
@@ -70,11 +68,13 @@ func (c *ChatController) ChatMessageSend(msg *nats.Msg) {
 		return
 	}
 
-	broadcasterID, err := strconv.Atoi(payload.Data.BroadcasterID)
-	if err != nil {
-		c.logger.ErrorContext(ctx, "cant parse to string", "err", err, "broadcasterID", payload.Data.BroadcasterID)
-	}
-	err = c.kickService.AppSendChannelMessage(ctx, *botProvider, broadcasterID, payload.Data.Message, payload.Data.ReplyTo)
+	err = c.kickService.AppSendChannelMessage(
+		ctx,
+		*botProvider,
+		payload.Data.BroadcasterID,
+		payload.Data.Message,
+		payload.Data.ReplyTo,
+	)
 	if err != nil {
 		c.logger.ErrorContext(
 			ctx,

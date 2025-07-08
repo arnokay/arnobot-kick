@@ -52,22 +52,21 @@ func (c *WebhookController) Callback(ctx echo.Context) error {
 		var event gokick.ChatMessageEvent
 		ctx.Bind(&event)
 
-		bot, err := c.botService.SelectedBotGetByBroadcasterID(ctx.Request().Context(), int(event.Broadcaster.UserID))
+    broadcasterID := strconv.Itoa(event.Broadcaster.UserID)
+		bot, err := c.botService.SelectedBotGetByBroadcasterID(ctx.Request().Context(), broadcasterID)
 		if err != nil {
 			c.logger.ErrorContext(ctx.Request().Context(), "cannot get selected bot")
 			return nil
 		}
 
-		broadcasterID := strconv.Itoa(event.Broadcaster.UserID)
 		chatterID := strconv.Itoa(event.Sender.UserID)
-
 
 		internalEvent := events.Message{
 			EventCommon: events.EventCommon{
 				Platform:      platform.Kick,
 				BroadcasterID: broadcasterID,
 				UserID:        bot.UserID,
-				BotID:         strconv.Itoa(int(bot.BotID)),
+				BotID:         bot.BotID,
 			},
 			MessageID:        event.MessageID,
 			Message:          event.Content,

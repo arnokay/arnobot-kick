@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/arnokay/arnobot-shared/apperror"
 	"github.com/arnokay/arnobot-shared/applog"
@@ -65,7 +66,7 @@ func (s *WebhookService) Unsubscribe(
 func (s *WebhookService) UnsubscribeAll(
 	ctx context.Context,
 	botProvider data.AuthProvider,
-	broadcasterID int,
+	broadcasterID string,
 ) error {
 	client := s.kickManager.GetByProvider(ctx, botProvider)
 
@@ -77,8 +78,13 @@ func (s *WebhookService) UnsubscribeAll(
 		return apperror.ErrExternal
 	}
 
+  bID, err := strconv.Atoi(broadcasterID)
+  if err != nil {
+    s.logger.ErrorContext(ctx, "cannot convert broadcasterID", "broadcaster_id", broadcasterID)
+    return apperror.ErrInvalidInput
+  }
 	for _, sub := range subs.Result {
-		if sub.BroadcasterUserID == int(broadcasterID) {
+		if sub.BroadcasterUserID == bID {
 			subIds = append(subIds, sub.ID)
 		}
 	}
