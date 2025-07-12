@@ -51,7 +51,7 @@ func main() {
 
 	// load logger
 	logger := applog.NewCharmLogger(os.Stdout, AppName, cfg.Global.LogLevel, nil)
-  applog.SetDefault(logger)
+	applog.SetDefault(logger)
 	app.logger = logger
 
 	// load db

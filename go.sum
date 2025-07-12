@@ -2,6 +2,8 @@ github.com/arnokay/arnobot-shared v0.1.1-0.20250706202612-7d2d33174fa7 h1:3F85SA
 github.com/arnokay/arnobot-shared v0.1.1-0.20250706202612-7d2d33174fa7/go.mod h1:sLLLTHdiDq6ss6lZpdC3CzH0wSqvF3Y0zSWjOAX/Ow0=
 github.com/arnokay/arnobot-shared v0.1.1-0.20250708203729-81662fe62b75 h1:pA2u/i5cz0IBW5xTO0qdNk1/+uRcxPIp0q+e6nijQ+g=
 github.com/arnokay/arnobot-shared v0.1.1-0.20250708203729-81662fe62b75/go.mod h1:sLLLTHdiDq6ss6lZpdC3CzH0wSqvF3Y0zSWjOAX/Ow0=
+github.com/arnokay/arnobot-shared v0.1.1-0.20250712222111-a8f8ae36cca1 h1:4mDBUIly9mztmfPGCe6LJmacEeQ2dgkRdnOkVg1s6sA=
+github.com/arnokay/arnobot-shared v0.1.1-0.20250712222111-a8f8ae36cca1/go.mod h1:sLLLTHdiDq6ss6lZpdC3CzH0wSqvF3Y0zSWjOAX/Ow0=
 github.com/aymanbagabas/go-osc52/v2 v2.0.1 h1:HwpRHbFMcZLEVr42D4p7XBqjyuxQH5SMiErDT4WkJ2k=
 github.com/aymanbagabas/go-osc52/v2 v2.0.1/go.mod h1:uYgXzlJ7ZpABp8OJ+exZzJJhRNQ2ASbcXHWsFqH8hp8=
 github.com/charmbracelet/colorprofile v0.2.3-0.20250311203215-f60798e515dc h1:4pZI35227imm7yK2bGPcfpFEmuY1gc2YSTShr4iJBfs=
@@ -61,6 +63,8 @@ github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
 github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
 github.com/scorfly/gokick v1.10.1 h1:UEES8xBTGaQooFa++VB7elwmeROHCGZ1BzzdqCY4gpo=
 github.com/scorfly/gokick v1.10.1/go.mod h1:9Tc5+/nwcCLjgDVUeW2K/vhEbkMkN+OE8UQVx4fL1WA=
+github.com/scorfly/gokick v1.11.0 h1:4VMpyO8hnPUW4dYgCfOi/YzMgVgj/Rh/OJW7oi2rn+0=
+github.com/scorfly/gokick v1.11.0/go.mod h1:9Tc5+/nwcCLjgDVUeW2K/vhEbkMkN+OE8UQVx4fL1WA=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=

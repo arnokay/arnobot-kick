@@ -3,7 +3,7 @@ module github.com/arnokay/arnobot-kick
 go 1.24.4
 
 require (
-	github.com/arnokay/arnobot-shared v0.1.1-0.20250708203729-81662fe62b75
+	github.com/arnokay/arnobot-shared v0.1.1-0.20250712222111-a8f8ae36cca1
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.7.4
 	github.com/labstack/echo/v4 v4.13.3
@@ -37,7 +37,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/nats-io/nkeys v0.4.11 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
-	github.com/scorfly/gokick v1.10.1
+	github.com/scorfly/gokick v1.11.0
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/crypto v0.37.0 // indirect

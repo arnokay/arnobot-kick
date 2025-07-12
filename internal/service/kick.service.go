@@ -40,7 +40,7 @@ func (s *KickService) AppSendChannelMessage(
 		return apperror.ErrInvalidInput
 	}
 
-	_, err = client.SendChatMessage(ctx, bID, message, &replyTo, gokick.MessageTypeUser)
+	_, err = client.SendChatMessage(ctx, &bID, message, &replyTo, gokick.MessageTypeUser)
 	if err != nil {
 		s.logger.ErrorContext(
 			ctx,
