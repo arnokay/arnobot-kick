@@ -10,6 +10,7 @@ import (
 	"github.com/arnokay/arnobot-shared/pkg/assert"
 	sharedService "github.com/arnokay/arnobot-shared/service"
 	"github.com/arnokay/arnobot-shared/storage"
+	"github.com/charmbracelet/log"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/nats-io/nats.go"
@@ -50,7 +51,9 @@ func main() {
 	cfg := config.Load()
 
 	// load logger
-	logger := applog.NewCharmLogger(os.Stdout, AppName, cfg.Global.LogLevel, nil)
+	logger := applog.NewCharmLogger(os.Stdout, AppName, cfg.Global.LogLevel, &log.Options{
+    ReportTimestamp: true,
+  })
 	applog.SetDefault(logger)
 	app.logger = logger
 
