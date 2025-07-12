@@ -62,7 +62,8 @@ func (m *Middlewares) RequestLogger(next echo.HandlerFunc) echo.HandlerFunc {
 		m.logger.DebugContext(
 			c.Request().Context(),
 			"recieved http request",
-			"path", c.Request().URL.RawPath,
+      "method", c.Request().Method,
+			"path", c.Request().URL.Path,
 			"user_id", userID,
 		)
 
@@ -71,7 +72,8 @@ func (m *Middlewares) RequestLogger(next echo.HandlerFunc) echo.HandlerFunc {
 		m.logger.DebugContext(
 			c.Request().Context(),
 			"finished http request",
-			"path", c.Request().URL.RawPath,
+      "method", c.Request().Method,
+			"path", c.Request().URL.Path,
 			"user_id", userID,
       "took", time.Since(now).Milliseconds(),
 		)
